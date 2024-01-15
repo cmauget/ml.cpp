@@ -1,20 +1,20 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -I../include
+CXXFLAGS = -std=c++14 
 SRC_DIR = ../src
 OBJ_DIR = ../obj
 SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
 OBJECTS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
+TESTHEADER = catch_amalgamated.cpp
 
-# Specify the main program source file
+
 MAIN_SOURCE = TestTensor.cpp
-
 TARGET = TestTensor.out
 
 $(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $(MAIN_SOURCE) $^ -o $@ -lcppunit
+	$(CXX) $(CXXFLAGS) $(MAIN_SOURCE) $^ $(TESTHEADER) -o $@ 
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $
 
 .PHONY: clean
 
