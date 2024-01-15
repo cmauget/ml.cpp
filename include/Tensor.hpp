@@ -32,9 +32,11 @@ class Tensor {
         //setters
         void setDim(vector<int> dim);
         void setData(vector<double> data);
+        void set(vector<int> indx, double data);
 
         //custom accessors
         vector<double> operator[](int i);
+        double operator()(vector<int> indx);
 
         //basics operators
         Tensor operator+(Tensor t);

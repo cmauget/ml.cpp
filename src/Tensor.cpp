@@ -1,4 +1,4 @@
-#include<../include/Tensor.hpp> //Contains using namespace std; and #include <vector>
+#include "../include/Tensor.hpp" //Contains using namespace std; and #include <vector>
 
 #include <iostream>
 
@@ -134,6 +134,48 @@ void Tensor::setData(vector<double> data_) {
     data = data_;
 }
 
+void Tensor::set(vector<int> indx, double data_) {
+    // Set the value of the tensor at the specified index
+
+    // Check if the index size is valid
+    if (indx.size() != dim.size()) {
+        // Throw an error
+        cout << "-----------------------" << endl;
+        cout << "Error: Index does not match the dimensions of the tensor" << endl;
+        cout << "Index: " << indx.size() << endl;
+        cout << "Dimensions of tensor: " << dim.size() << endl;
+        cout << "Assigning nothing" << endl;
+        cout << "-----------------------" << endl;
+        return;
+    }
+
+    // Check if the index is not out of bound
+    for (int i = 0; i < indx.size(); i++) {
+        if (indx[i] < 0 || indx[i] >= dim[i]) {
+            // Throw an error
+            cout << "-----------------------" << endl;
+            cout << "Error: Index " << i << " out of range" << endl;
+            cout << "Index: " << indx[i] << endl;
+            cout << "Dimension of tensor: " << dim[i] << endl;
+            cout << "Assigning nothing" << endl;
+            cout << "-----------------------" << endl;
+            return;
+        }
+    }
+
+    // Calculate the index of the element in the array
+    int index = 0;
+    for (int i = 0; i < indx.size(); i++) {
+        int temp = 1;
+        for (int j = i + 1; j < indx.size(); j++) {
+            temp *= dim[j];
+        }
+        index += indx[i] * temp;
+    }
+
+    data[index] = data_;
+}
+
 
 //--------------------Custom assesors--------------------//
 
@@ -154,6 +196,48 @@ vector<double> Tensor::operator[](int i) {
     }
     return row;
     }
+
+double Tensor::operator()(vector<int> indx) {
+    // Return the value of the tensor at the specified index
+
+    // Check if the index size is valid
+    if (indx.size() != dim.size()) {
+        // Throw an error
+        cout << "-----------------------" << endl;
+        cout << "Error: Index does not match the dimensions of the tensor" << endl;
+        cout << "Index: " << indx.size() << endl;
+        cout << "Dimensions of tensor: " << dim.size() << endl;
+        cout << "Returning first element" << endl;
+        cout << "-----------------------" << endl;
+        return data[0];
+    }
+
+    // Check if the index is not out of bound
+    for (int i = 0; i < indx.size(); i++) {
+        if (indx[i] < 0 || indx[i] >= dim[i]) {
+            // Throw an error
+            cout << "-----------------------" << endl;
+            cout << "Error: Index " << i << " out of range" << endl;
+            cout << "Index: " << indx[i] << endl;
+            cout << "Dimension of tensor: " << dim[i] << endl;
+            cout << "Returning first element" << endl;
+            cout << "-----------------------" << endl;
+            return data[0];
+        }
+    }
+
+    // Calculate the index of the element in the array
+    int index = 0;
+    for (int i = 0; i < indx.size(); i++) {
+        int temp = 1;
+        for (int j = i + 1; j < indx.size(); j++) {
+            temp *= dim[j];
+        }
+        index += indx[i] * temp;
+    }
+
+    return data[index];
+}
 
 
 //--------------------Operators--------------------//
@@ -240,8 +324,9 @@ Tensor Tensor::operator*(Tensor t){
         //multiply the two tensors
         for (int i = 0; i < dim[0]; i++) {
             for (int j = 0; j < t.dim[1]; j++) {
-                for (int k = 0; k < dim[1]; k++) {
-                    result.data[i*dim[1]+j] += data[i*dim[1]+k]*t.data[k*t.dim[1]+j];
+                for (int k = 0; k < t.dim[0]; k++) {
+                    result.data[i*dim_[1]+j] += data[i*dim[1]+k] * t.data[k*t.dim[1]+j];
+                    //cout << i*dim_[1]+j << " : " << result.data[i*dim_[1]+j] << endl;
                 }
             }
         }
