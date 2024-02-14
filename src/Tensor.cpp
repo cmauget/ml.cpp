@@ -1,6 +1,8 @@
 #include "../include/Tensor.hpp" //Contains using namespace std; and #include <vector>
 
-#include <iostream>
+#include <stdexcept> //Contains throw invalid_argument
+
+#define GET_VARIABLE_NAME(Variable) (#Variable)
 
 
 //--------------------Constructors and Destructors--------------------//
@@ -48,8 +50,12 @@ Tensor::Tensor(vector<int> dim_, vector<double> data_) {
         cout << "Size of tensor: " << size << endl;
         cout << "Removing excess elements from data vector" << endl;
         cout << "-----------------------" << endl;
-        for (int i = size; i <= data_.size(); i++) {
+        int ubound = data_.size();
+        for (int i = size; i < ubound; i++) {
             data_.pop_back();
+            //cout << size << endl;
+            //cout << "Popping " << i << endl;
+            //cout << data_.size() << endl;
         }
     }
     else if (data_.size() < size) {
@@ -270,8 +276,10 @@ Tensor Tensor::operator+(Tensor t) {
             cout << t.dim[i] << " ";
         }
         cout << endl;
-        cout << "Returning first tensor" << endl;
         cout << "-----------------------" << endl;
+        throw invalid_argument("Dimensions of the two tensors do not match (addition)");
+        cout << "Returning first tensor" << endl;
+        
         return *this;
     }
 }
@@ -304,8 +312,12 @@ Tensor Tensor::operator-(Tensor t) {
             cout << t.dim[i] << " ";
         }
         cout << endl;
-        cout << "Returning first tensor" << endl;
         cout << "-----------------------" << endl;
+
+        throw invalid_argument("Dimensions of the two tensors do not match (substraction)");
+
+        cout << "Returning first tensor" << endl;
+        
         return *this;
     }
 }
@@ -321,10 +333,27 @@ Tensor Tensor::operator*(Tensor t){
         dim_.push_back(t.dim[t.dim.size()-1]);
         Tensor result(dim_);
 
-        //multiply the two tensors
+
+        //const int blockSize = 13;
+
+        // Blocked matrix multiplication
+        /*for (int i = 0; i < dim[0]; i += blockSize) {
+            for (int j = 0; j < t.dim[1]; j += blockSize) {
+                for (int k = 0; k < dim[1]; k += blockSize) {
+                    for (int ii = i; ii < min(i + blockSize, dim[0]); ++ii) {
+                        for (int jj = j; jj < min(j + blockSize, t.dim[1]); ++jj) {
+                            for (int kk = k; kk < min(k + blockSize, dim[1]); ++kk) {
+                                result.data[ii * dim_[1] + jj] += data[ii * dim[1] + kk] * t.data[kk * t.dim[1] + jj];
+                            }
+                        }
+                    }
+                }
+            }
+        }*/
+
         for (int i = 0; i < dim[0]; i++) {
-            for (int j = 0; j < t.dim[1]; j++) {
-                for (int k = 0; k < t.dim[0]; k++) {
+            for (int k = 0; k < dim[1]; k++) {
+                for (int j = 0; j < t.dim[1]; j++) {
                     result.data[i*dim_[1]+j] += data[i*dim[1]+k] * t.data[k*t.dim[1]+j];
                     //cout << i*dim_[1]+j << " : " << result.data[i*dim_[1]+j] << endl;
                 }
@@ -346,11 +375,87 @@ Tensor Tensor::operator*(Tensor t){
         for (int i = 0; i < t.dim.size(); i++) {
             cout << t.dim[i] << " ";
         }
+        throw invalid_argument("Dimensions of the two tensors do not match (multiplication)");
         cout << endl;
         cout << "Returning first tensor" << endl;
         cout << "-----------------------" << endl;
         return *this;
     }
+}
+
+Tensor Tensor::operator*(double d) {
+    // Multiply a tensor by a scalar
+    // Create a new tensor to store the result
+    Tensor result(dim);
+
+    // Multiply the tensor by the scalar
+    for (int i = 0; i < size; i++) {
+        result.data[i] = data[i] * d;
+    }
+
+    return result;
+}
+
+ostream& operator<<(ostream& os, const Tensor& obj) {
+    // Overload the << operator to print the tensor
+    // Print the dimensions of the tensor
+    os << "Dimensions: ";
+    for (int i = 0; i < obj.dim.size(); i++) {
+        os << obj.dim[i] << " ";
+    }
+    os << endl;
+
+    // Print the data of the tensor
+    os << "Data: ";
+    for (int i = 0; i < obj.size; i++) {
+        os << obj.data[i] << " ";
+    }
+    os << endl;
+
+    return os;
+}
+
+void Tensor::matmult(Tensor& a, Tensor& b, Tensor& c) {
+
+    for (int i = 0; i < a.dim[0]; i++) {
+        for (int j = 0; j < b.dim[1]; j++) {
+            for (int k = 0; k < b.dim[0]; k++) {
+            
+                c.data[i*c.dim[1]+j] += a.data[i*a.dim[1]+k] * b.data[k*b.dim[1]+j];
+                //cout << i*dim_[1]+j << " : " << result.data[i*dim_[1]+j] << endl;
+            }
+            }
+        }
+
+}
+
+void Tensor::unsquezze() {
+    // Unsqueeze the tensor
+    // Add a new dimension to the tensor
+    this->dim.push_back(1);
+}
+
+void Tensor::squezze() {
+    // Squezze the tensor
+    // Remove the last dimension of the tensor if it is equal to 1
+    if(dim[dim.size() - 1] != 1){
+        cout << "-----------------------" << endl;
+        cout << "Error: Last dimension of the tensor is not equal to 1" << endl;
+        cout << "Last dimension: " << dim[dim.size() - 1] << endl;
+        cout << "Returning tensor" << endl;
+        cout << "-----------------------" << endl;
+        return;
+    }
+    dim.pop_back();
+    size /= dim[dim.size() - 1];
+}
+
+void Tensor::T() {
+    // Transpose the tensor
+
+    vector<int> dim_ = this->dim;
+    reverse(dim_.begin(), dim_.end());
+    this->dim = dim_;
 }
 
 

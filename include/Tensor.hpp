@@ -4,6 +4,7 @@
 // necessary libraries
 #include <vector>
 
+#include <iostream>
 
 // necessary namespaces
 using namespace std;
@@ -42,12 +43,24 @@ class Tensor {
         Tensor operator+(Tensor t);
         Tensor operator-(Tensor t);
         Tensor operator*(Tensor t);
-        Tensor operator/(Tensor t);
 
         Tensor operator+(double d);
         Tensor operator-(double d);
         Tensor operator*(double d);
-        Tensor operator/(double d);    
+        Tensor operator/(double d);
+
+        static void matmult(Tensor& a, Tensor& b, Tensor& c);
+
+        //squezze and unsquezze
+        void unsquezze();
+        void squezze();
+
+        void T();
+
+        friend ostream& operator<<(ostream& os, const Tensor& obj);
+
+        
+
 };
 
 
