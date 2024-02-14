@@ -1,5 +1,7 @@
 #env settigns
 /.vscode
+.DS_Store
+*.csv
 
 # Prerequisites
 *.d
