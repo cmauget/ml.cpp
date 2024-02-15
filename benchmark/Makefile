@@ -1,21 +1,8 @@
-CXX = g++
-CXXFLAGS = -std=c++14 -Wall 
-SRC_DIR = ../src
-OBJ_DIR = ../obj
-SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
-OBJECTS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
+tensor:
+	g++ -std=c++14 -o BenchmarkTensors.out BenchmarkTensors.cpp ../src/Tensor.cpp
 
-
-MAIN_SOURCE = BenchmarkTensors.cpp
-TARGET = BenchmarkTensors.out
-
-$(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $(MAIN_SOURCE) $^  -o $@ -O3
-
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ $ -O3
-
-.PHONY: clean
+neuron:
+	g++ -std=c++14 -o TestNeuron.out TestNeuron.cpp ../src/Neuron.cpp ../src/Tensor.cpp
 
 clean:
-	rm -f $(OBJECTS) $(TARGET)
+	rm -f TestNeuron.out BenchmarkTensors.out
