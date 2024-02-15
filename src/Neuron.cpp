@@ -4,23 +4,23 @@
 //--------------------Constructors and Destructors--------------------//
 Neuron::Neuron(){
     n_inputs = 0;
-    n_outputs = 0;
+    n_outputs = 1;
     weights = Tensor();
     bias = Tensor();
     output = Tensor();
 }
 
-Neuron::Neuron(int n_inputs_, int n_outputs_){
+Neuron::Neuron(int n_inputs_){
     n_inputs = n_inputs_;
-    n_outputs = n_outputs_;
+    n_outputs = 1;
     weights = Tensor({n_inputs, n_outputs});
     bias = Tensor({1,n_outputs});
-    output = Tensor({1,n_outputs});
+    output = Tensor({1,1});
 }
 
-Neuron::Neuron(int n_inputs_, int n_outputs_, Tensor weights_, Tensor bias_){
+Neuron::Neuron(int n_inputs_, Tensor weights_, Tensor bias_){
     n_inputs = n_inputs_;
-    n_outputs = n_outputs_;
+    n_outputs = 1;
     weights = weights_;
     bias = bias_;
     output = Tensor({1,n_outputs});
@@ -59,17 +59,16 @@ void Neuron::forward(Tensor inputs){
 }
 
 Tensor Neuron::backward(Tensor label){
-    cout << "Label: " << label << endl;
-    cout << "Output: " << output << endl;
+    //cout << "Label: " << label << endl;
+    //cout << "Output: " << output << endl;
     Tensor error = label - output;
-    cout << "Error: " << error << endl;
+    //cout << "Error: " << error << endl;
     return error;
 }
 
 void Neuron::updateWeights(Tensor inputs, Tensor error, double learning_rate){
-    Tensor update_val = error * inputs * learning_rate;
+    Tensor update_val =  inputs * learning_rate * error.getData()[0];
     //cout << "Update Val: " << update_val << endl;
-    Tensor update_bias = error * learning_rate;
     update_val.T();
    // cout << "Update Val: " << update_val << endl;
     weights = weights + update_val;

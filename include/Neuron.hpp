@@ -15,8 +15,8 @@ class Neuron {
 
     public:
         Neuron();
-        Neuron(int n_inputs, int n_outputs);
-        Neuron(int n_inputs, int n_outputs, Tensor weights, Tensor bias);
+        Neuron(int n_inputs);
+        Neuron(int n_inputs, Tensor weights, Tensor bias);
 
         void setWeights(Tensor weights);
         void setBias(Tensor bias);
