@@ -1,9 +1,11 @@
 #define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
 #include "catch_amalgamated.hpp"
 #include <iostream>
+#include <cmath>
 
 #include "../include/Tensor.hpp"
 #include "../include/Neuron.hpp"
+#include "../include/Activation.hpp"
 
 using namespace std;
 
@@ -211,17 +213,144 @@ TEST_CASE("TestNeuron Constructors", "[Neuron]") {
     }
 
     SECTION("Constructor with specified dimensions") {
-        Neuron n2(2, 3);
+        Neuron n2(2);
         REQUIRE(n2.getWeights().getDim().size() == 2);
         REQUIRE(n2.getWeights().getDim()[0] == 2);
-        REQUIRE(n2.getWeights().getDim()[1] == 3);
-        REQUIRE(n2.getWeights().getData().size() == 6);
+        REQUIRE(n2.getWeights().getDim()[1] == 1);
+        REQUIRE(n2.getWeights().getData().size() == 2);
         REQUIRE(n2.getBias().getDim().size() == 2);
         REQUIRE(n2.getBias().getDim()[0] == 1);
-        REQUIRE(n2.getBias().getData().size() == 3);
+        REQUIRE(n2.getBias().getData().size() == 1);
         REQUIRE(n2.getOutput().getDim().size() == 2);
         REQUIRE(n2.getOutput().getDim()[0] == 1);
-        REQUIRE(n2.getOutput().getData().size() == 3);
+        REQUIRE(n2.getOutput().getData().size() == 1);
     }
 
+}
+
+TEST_CASE("TestNeuron Binary classification"){
+
+    vector<double> x1_data = {0.3, 0.5};
+    vector<double> x2_data = {1.0,2.0};
+    vector<double> x3_data = {0.7, 0.1};
+    vector<double> x4_data = {2.0, 1.0};
+    vector<double> y1_data = {1.0};
+    vector<double> y2_data = {1.0};
+    vector<double> y3_data = {-1.0};
+    vector<double> y4_data = {-1.0};
+
+
+    Tensor x1({1,2}, x1_data);
+    Tensor x2({1,2}, x2_data);
+    Tensor x3({1,2}, x3_data);
+    Tensor x4({1,2}, x4_data);
+    Tensor y1({1,1}, y1_data);
+    Tensor y2({1,1}, y2_data);
+    Tensor y3({1,1}, y3_data);
+    Tensor y4({1,1}, y4_data);
+
+    Neuron n1(2);
+
+    Tensor bias({1,1}, {0.5});
+    //n1.setBias(bias);
+
+    double learning_rate = 0.01;
+
+    for(int i = 0; i < 1000; i++){
+
+        double total_error = 0.0;
+        //cout << "flag1" << endl;
+        n1.forward(x1);
+        //cout << "flag2" << endl;
+        Tensor error = n1.backward(y1);
+        //cout << "flag3" << endl;
+        n1.updateWeights(x1, error, learning_rate);
+        //cout << "flag4" << endl;
+        total_error += pow(error.getData()[0],2);
+
+        n1.forward(x2);
+        error = n1.backward(y2);
+        n1.updateWeights(x2, error, learning_rate);
+        total_error += pow(error.getData()[0],2);
+
+        n1.forward(x3);
+        error = n1.backward(y3);
+        n1.updateWeights(x3, error, learning_rate);
+        total_error += pow(error.getData()[0],2);
+
+        n1.forward(x4);
+        error = n1.backward(y4);
+        n1.updateWeights(x4, error, learning_rate);
+        total_error += pow(error.getData()[0],2);
+    }
+
+    n1.forward(x1);
+    //cout << n1.getOutput() << endl;
+    CHECK(n1.getOutput().getData()[0] > 0.0);
+    n1.forward(x2);
+    //cout << n1.getOutput() << endl;
+    CHECK(n1.getOutput().getData()[0] > 0.0);
+    n1.forward(x3);
+    //cout << n1.getOutput() << endl;
+    CHECK(n1.getOutput().getData()[0] < 0.0);
+    n1.forward(x4);
+    //cout << n1.getOutput() << endl;
+    CHECK(n1.getOutput().getData()[0] < 0.0);
+
+}
+
+TEST_CASE("TestActivation Functions", "[Activation]") {
+    SECTION("Sigmoid") {
+        double x = -0.5;
+        double y = Activation::sigmoid(x);
+        y = round(y * 1000.0) / 1000.0;
+        REQUIRE(y == 0.378);
+
+        x = 0.5;
+        y = Activation::sigmoid(x);
+        y = round(y * 1000.0) / 1000.0;
+        REQUIRE(y == 0.622);
+    }
+
+    SECTION("Linear") {
+        double x = 0.0;
+        double y = Activation::linear(x);
+        REQUIRE(y == 0.0);
+
+        x = 1.0;
+        y = Activation::linear(x);
+        REQUIRE(y == 1.0);
+
+        x = -1.0;
+        y = Activation::linear(x);
+        REQUIRE(y == -1.0);
+    }
+
+    SECTION("Relu") {
+        double x = -1.0;
+        double y = Activation::relu(x);
+        REQUIRE(y == 0.0);
+
+        x = 0.0;
+        y = Activation::relu(x);
+        REQUIRE(y == 0.0);
+
+        x = 1.0;
+        y = Activation::relu(x);
+        REQUIRE(y == 1.0);
+    }
+
+    SECTION("LeakyRelu") {
+        double x = 0.0;
+        double y = Activation::leakyRelu(x);
+        REQUIRE(y == 0.0);
+    }
+
+    SECTION("Tanh") {
+        double x = 0.0;
+        double y = Activation::tanh(x);
+        REQUIRE(y == 0.0);
+    }
+
+    
 }
