@@ -45,7 +45,7 @@ Tensor::Tensor(vector<int> dim_, vector<double> data_) {
     if (data_.size() > size) {
         // Throw an error
         cout << "-----------------------" << endl;
-        cout << "Error: Size of data vector does not match the size of the tensor" << endl;
+        cout << "\033[31mError:\033[0m Size of data vector does not match the size of the tensor" << endl;
         cout << "Size of data vector: " << data_.size() << endl;
         cout << "Size of tensor: " << size << endl;
         cout << "Removing excess elements from data vector" << endl;
@@ -61,7 +61,7 @@ Tensor::Tensor(vector<int> dim_, vector<double> data_) {
     else if (data_.size() < size) {
         // Throw an error
         cout << "-----------------------" << endl;
-        cout << "Error: Size of data vector does not match the size of the tensor" << endl;
+        cout << "\033[31mError:\033[0m Size of data vector does not match the size of the tensor" << endl;
         cout << "Size of data vector: " << data_.size() << endl;
         cout << "Size of tensor: " << size << endl;
         cout << "Adding zeros to data vector" << endl;
@@ -112,7 +112,7 @@ void Tensor::setData(vector<double> data_) {
     if (data_.size() > size) {
         // Throw an error
         cout << "-----------------------" << endl;
-        cout << "Error: Size of data vector does not match the size of the tensor" << endl;
+        cout << "\033[31mError:\033[0m Size of data vector does not match the size of the tensor" << endl;
         cout << "Size of data vector: " << data_.size() << endl;
         cout << "Size of tensor: " << size << endl;
         cout << "Removing excess elements from data vector" << endl;
@@ -124,7 +124,7 @@ void Tensor::setData(vector<double> data_) {
     else if (data_.size() < size) {
         // Throw an error
         cout << "-----------------------" << endl;
-        cout << "Error: Size of data vector does not match the size of the tensor" << endl;
+        cout << "\033[31mError:\033[0m Size of data vector does not match the size of the tensor" << endl;
         cout << "Size of data vector: " << data_.size() << endl;
         cout << "Size of tensor: " << size << endl;
         cout << "Adding zeros to data vector" << endl;
@@ -147,7 +147,7 @@ void Tensor::set(vector<int> indx, double data_) {
     if (indx.size() != dim.size()) {
         // Throw an error
         cout << "-----------------------" << endl;
-        cout << "Error: Index does not match the dimensions of the tensor" << endl;
+        cout << "\033[31mError:\033[0m Index does not match the dimensions of the tensor" << endl;
         cout << "Index: " << indx.size() << endl;
         cout << "Dimensions of tensor: " << dim.size() << endl;
         cout << "Assigning nothing" << endl;
@@ -160,7 +160,7 @@ void Tensor::set(vector<int> indx, double data_) {
         if (indx[i] < 0 || indx[i] >= dim[i]) {
             // Throw an error
             cout << "-----------------------" << endl;
-            cout << "Error: Index " << i << " out of range" << endl;
+            cout << "\033[31mError:\033[0m Index " << i << " out of range" << endl;
             cout << "Index: " << indx[i] << endl;
             cout << "Dimension of tensor: " << dim[i] << endl;
             cout << "Assigning nothing" << endl;
@@ -188,7 +188,7 @@ void Tensor::set(vector<int> indx, double data_) {
 vector<double> Tensor::operator[](int i) {
     if (i < 0 || i >= dim[0]) {
         cout << "-----------------------" << endl;
-        cout << "Row index out of range" << endl;
+        cout << "\033[31mError:\033[0m Row index out of range" << endl;
         cout << "Row index: " << i << endl;
         cout << "Number of rows: " << dim[0] << endl;
         cout << "Returning first row" << endl;
@@ -210,7 +210,7 @@ double Tensor::operator()(vector<int> indx) {
     if (indx.size() != dim.size()) {
         // Throw an error
         cout << "-----------------------" << endl;
-        cout << "Error: Index does not match the dimensions of the tensor" << endl;
+        cout << "\033[31mError:\033[0m Index does not match the dimensions of the tensor" << endl;
         cout << "Index: " << indx.size() << endl;
         cout << "Dimensions of tensor: " << dim.size() << endl;
         cout << "Returning first element" << endl;
@@ -223,7 +223,7 @@ double Tensor::operator()(vector<int> indx) {
         if (indx[i] < 0 || indx[i] >= dim[i]) {
             // Throw an error
             cout << "-----------------------" << endl;
-            cout << "Error: Index " << i << " out of range" << endl;
+            cout << "\033[31mError:\033[0m Index " << i << " out of range" << endl;
             cout << "Index: " << indx[i] << endl;
             cout << "Dimension of tensor: " << dim[i] << endl;
             cout << "Returning first element" << endl;
@@ -265,7 +265,7 @@ Tensor Tensor::operator+(Tensor t) {
     else {
         // Throw an error
         cout << "-----------------------" << endl;
-        cout << "Error: Dimensions of the two tensors do not match" << endl;
+        cout << "\033[31mError:\033[0m Dimensions of the two tensors do not match" << endl;
         cout << "Dimensions of first tensor: ";
         for (int i = 0; i < dim.size(); i++) {
             cout << dim[i] << " ";
@@ -301,7 +301,7 @@ Tensor Tensor::operator-(Tensor t) {
     else {
         // Throw an error
         cout << "-----------------------" << endl;
-        cout << "Error: Dimensions of the two tensors do not match" << endl;
+        cout << "\033[31mError:\033[0m Dimensions of the two tensors do not match" << endl;
         cout << "Dimensions of first tensor: ";
         for (int i = 0; i < dim.size(); i++) {
             cout << dim[i] << " ";
@@ -365,7 +365,7 @@ Tensor Tensor::operator*(Tensor t){
     else {
         //throw an error
         cout << "-----------------------" << endl;
-        cout << "Error: Dimensions of the two tensors do not match" << endl;
+        cout << "\033[31mError:\033[0m Dimensions of the two tensors do not match" << endl;
         cout << "Dimensions of first tensor: ";
         for (int i = 0; i < dim.size(); i++) {
             cout << dim[i] << " ";
@@ -375,6 +375,8 @@ Tensor Tensor::operator*(Tensor t){
         for (int i = 0; i < t.dim.size(); i++) {
             cout << t.dim[i] << " ";
         }
+        cout << endl;
+        cout << "-----------------------" << endl;
         throw invalid_argument("Dimensions of the two tensors do not match (multiplication)");
         cout << endl;
         cout << "Returning first tensor" << endl;
@@ -440,7 +442,7 @@ void Tensor::squezze() {
     // Remove the last dimension of the tensor if it is equal to 1
     if(dim[dim.size() - 1] != 1){
         cout << "-----------------------" << endl;
-        cout << "Error: Last dimension of the tensor is not equal to 1" << endl;
+        cout << "\033[31mError:\033[0m Last dimension of the tensor is not equal to 1" << endl;
         cout << "Last dimension: " << dim[dim.size() - 1] << endl;
         cout << "Returning tensor" << endl;
         cout << "-----------------------" << endl;
@@ -450,14 +452,11 @@ void Tensor::squezze() {
     size /= dim[dim.size() - 1];
 }
 
-void Tensor::T() {
+Tensor Tensor::T() {
     // Transpose the tensor
-
-    vector<int> dim_ = this->dim;
+    vector<int> dim_ = dim;
     reverse(dim_.begin(), dim_.end());
-    this->dim = dim_;
+    Tensor result(dim_, data);
+    
+    return result;
 }
-
-
-
-

@@ -13,12 +13,12 @@ int MAX_SIZE = 2000;
 
 
 
-Tensor generate_Tensor(vector<int> dim) {
+Tensor generate_Tensor(vector<int> dim, double min, double max) {
     //randomly generate data
     vector<double> data;
     for(int i = 0; i < (dim[0]*dim[1]); i++) {
-        data.push_back(((double)rand() / RAND_MAX)*10);
-        //cout << data[i] << endl;
+        data.push_back(((double)rand() / RAND_MAX)*(max-min)+min);
+        cout << data[i] << endl;
     }
 
     Tensor t(dim, data);
@@ -61,8 +61,8 @@ int main() {
 
         cout << "Benchmarking Tensor Multiplication for " << i << "x" << i << " Tensors" << endl;
 
-        Tensor t1 = generate_Tensor({i, i});
-        Tensor t2 = generate_Tensor({i, i});
+        Tensor t1 = generate_Tensor({i, i},-1.0,1.0);
+        Tensor t2 = generate_Tensor({i, i},-1.0,1.0);
 
         Tensor t3 = Tensor({i, i});
 
