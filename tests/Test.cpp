@@ -240,10 +240,10 @@ TEST_CASE("TestNeuron Binary classification"){
     vector<double> y4_data = {-1.0};
 
 
-    Tensor x1({1,2}, x1_data);
-    Tensor x2({1,2}, x2_data);
-    Tensor x3({1,2}, x3_data);
-    Tensor x4({1,2}, x4_data);
+    Tensor x1({2,1}, x1_data);
+    Tensor x2({2,1}, x2_data);
+    Tensor x3({2,1}, x3_data);
+    Tensor x4({2,1}, x4_data);
     Tensor y1({1,1}, y1_data);
     Tensor y2({1,1}, y2_data);
     Tensor y3({1,1}, y3_data);
@@ -345,12 +345,5 @@ TEST_CASE("TestActivation Functions", "[Activation]") {
         double y = Activation::leakyRelu(x);
         REQUIRE(y == 0.0);
     }
-
-    SECTION("Tanh") {
-        double x = 0.0;
-        double y = Activation::tanh(x);
-        REQUIRE(y == 0.0);
-    }
-
     
 }

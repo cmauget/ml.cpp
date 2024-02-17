@@ -55,7 +55,7 @@ class Tensor {
         void unsquezze();
         void squezze();
 
-        void T();
+        Tensor T();
 
         friend ostream& operator<<(ostream& os, const Tensor& obj);
 

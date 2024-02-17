@@ -54,7 +54,7 @@ Tensor Neuron::getOutput(){
 
 //--------------------Forward and Backward--------------------//
 void Neuron::forward(Tensor inputs){
-    output = inputs * weights;
+    output = weights.T() * inputs;
     output = output + bias;
 }
 
@@ -69,7 +69,7 @@ Tensor Neuron::backward(Tensor label){
 void Neuron::updateWeights(Tensor inputs, Tensor error, double learning_rate){
     Tensor update_val =  inputs * learning_rate * error.getData()[0];
     //cout << "Update Val: " << update_val << endl;
-    update_val.T();
+    //update_val.T();
    // cout << "Update Val: " << update_val << endl;
     weights = weights + update_val;
     //bias = bias + update_bias;
