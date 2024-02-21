@@ -3,7 +3,7 @@
 
 #include "../include/Tensor.hpp"
 
-//#include <cmath>
+#include <cmath>
 #include <iostream>
 
 using namespace std;
@@ -12,7 +12,9 @@ class Activation {
 
 public:
 
-    static double sigmoid(double x); 
+    static double sigmoid(double x);
+
+    static double sigmoid_prime(double x); 
 
     static double linear(double x); 
 
@@ -23,6 +25,8 @@ public:
     static double tanh(double x); 
 
     static Tensor sigmoid(Tensor x);
+
+    static Tensor sigmoid_prime(Tensor x);
 
     static Tensor linear(Tensor x); 
 

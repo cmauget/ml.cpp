@@ -4,6 +4,10 @@ double Activation::sigmoid(double x) {
     return 1 / (1 + exp(-x));
 }
 
+double Activation::sigmoid_prime(double x) {
+    return sigmoid(x) * (1 - sigmoid(x));
+}
+
 double Activation::linear(double x) {
     return x;
 }
@@ -24,6 +28,14 @@ Tensor Activation::sigmoid(Tensor x) {
     vector<double> data = x.getData();
     for (int i = 0; i < data.size(); i++) {
         data[i] = Activation::sigmoid(data[i]);
+    }
+    return Tensor(x.getDim(), data);
+}
+
+Tensor Activation::sigmoid_prime(Tensor x) {
+    vector<double> data = x.getData();
+    for (int i = 0; i < data.size(); i++) {
+        data[i] = Activation::sigmoid_prime(data[i]);
     }
     return Tensor(x.getDim(), data);
 }
@@ -55,4 +67,6 @@ Tensor Activation::tanh(Tensor x) {
     }
     return Tensor(x.getDim(), data);
 }
+
+
 
