@@ -49,6 +49,8 @@ class Tensor {
         Tensor operator*(double d);
         Tensor operator/(double d);
 
+        Tensor element_wise_mult(Tensor t);
+
         static void matmult(Tensor& a, Tensor& b, Tensor& c);
 
         //squezze and unsquezze

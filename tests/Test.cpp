@@ -191,6 +191,31 @@ TEST_CASE("TestTensor Mult", "[Tensor]") {
         CHECK_THROWS(t7 = t1 * t6);
     
     }
+
+    SECTION("Element wise mult"){
+        vector<int> dim = {2, 2};
+        vector<double> data = {1.0, 2.0, 3.0, 4.0};
+        Tensor t1(dim, data);
+        Tensor t2(dim, data);
+        Tensor t3 = t1.element_wise_mult(t2);
+        data = t3.getData();
+        REQUIRE(data[0] == 1.0);
+        REQUIRE(data[1] == 4.0);
+        REQUIRE(data[2] == 9.0);
+        REQUIRE(data[3] == 16.0);
+        REQUIRE(data.size() == 4);
+    }
+
+    SECTION("Element wise mult with mismatched dimensions"){
+        vector<int> dim = {2, 2};
+        vector<double> data = {1.0, 2.0, 3.0, 4.0};
+        Tensor t1(dim, data);
+        vector<int> dim2 = {1, 2};
+        data = {1.0, 2.0};
+        Tensor t6(dim2, data);
+        Tensor t7;
+        CHECK_THROWS(t7 = t1.element_wise_mult(t6));
+    }
 }
 
 

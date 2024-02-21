@@ -398,6 +398,42 @@ Tensor Tensor::operator*(double d) {
     return result;
 }
 
+Tensor Tensor::element_wise_mult(Tensor t) {
+    // Multiply two tensors element-wise
+    // Check if the dimensions of the two tensors are the same
+    if (dim == t.dim) {
+        // Create a new tensor to store the result
+        Tensor result(dim);
+
+        // Multiply the two tensors element-wise
+        for (int i = 0; i < size; i++) {
+            result.data[i] = data[i] * t.data[i];
+        }
+
+        return result;
+    }
+    else {
+        // Throw an error
+        cout << "-----------------------" << endl;
+        cout << "\033[31mError:\033[0m Dimensions of the two tensors do not match" << endl;
+        cout << "Dimensions of first tensor: ";
+        for (int i = 0; i < dim.size(); i++) {
+            cout << dim[i] << " ";
+        }
+        cout << endl;
+        cout << "Dimensions of second tensor: ";
+        for (int i = 0; i < t.dim.size(); i++) {
+            cout << t.dim[i] << " ";
+        }
+        cout << endl;
+        cout << "-----------------------" << endl;
+        throw invalid_argument("Dimensions of the two tensors do not match (element-wise multiplication)");
+        cout << "Returning first tensor" << endl;
+        cout << "-----------------------" << endl;
+        return *this;
+    }
+}
+
 ostream& operator<<(ostream& os, const Tensor& obj) {
     // Overload the << operator to print the tensor
     // Print the dimensions of the tensor
