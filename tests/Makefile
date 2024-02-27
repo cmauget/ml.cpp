@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++14 
+CXXFLAGS = -std=c++14 -O3
 SRC_DIR = ../src
 OBJ_DIR = ../obj
 SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
