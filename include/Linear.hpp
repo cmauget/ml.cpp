@@ -19,15 +19,23 @@ class Linear : public Layer {
         Tensor bias;
 
     public:
-        Linear(int input_size, int output_size);
 
-        static Tensor generateRandomWeights(std::vector<int> dim, double min, double max);
+        //constructors and destructors
+        Linear(int input_size, int output_size, bool randomize = true);
 
-    
-        void randomizeWeights(double min, double max);
+        //getters and setters
+        void setWeights(Tensor weights);
+        void setBias(Tensor bias);
+        Tensor getWeights();
+        Tensor getBias();
         
+        //forward and backward
         Tensor forward(Tensor input) override ;
         Tensor backward(Tensor grad, double learning_rate) override;
+
+        //utils functions
+        static Tensor generateRandomWeights(std::vector<int> dim, double min, double max);
+        void randomizeWeights(double min, double max);
 
 };
 
