@@ -20,9 +20,15 @@ public:
 
     static double relu(double x); 
 
+    static double relu_prime(double x);
+
     static double leakyRelu(double x);
 
+    static double leakyRelu_prime(double x);
+
     static double tanh(double x); 
+
+    static double tanh_prime(double x);
 
     static Tensor sigmoid(Tensor x);
 
@@ -32,9 +38,15 @@ public:
 
     static Tensor relu(Tensor x);
 
+    static Tensor relu_prime(Tensor x);
+
     static Tensor leakyRelu(Tensor x);
 
+    static Tensor leakyRelu_prime(Tensor x);
+
     static Tensor tanh(Tensor x);
+
+    static Tensor tanh_prime(Tensor x);
 
 };
 
