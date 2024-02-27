@@ -1,6 +1,8 @@
 #include "../include/ActivationLayer.hpp"
 #include "../include/Activation.hpp"
 
+#include <stdexcept>
+
 ActivationLayer::ActivationLayer(string activation_type) {
     if (activation_type == "sigmoid") {
         activation = Activation::sigmoid;
@@ -16,9 +18,9 @@ ActivationLayer::ActivationLayer(string activation_type) {
         activation_prime = Activation::leakyRelu;
     } else if (activation_type == "tanh") {
         activation = Activation::tanh;
-        activation_prime = Activation::tanh;
+        activation_prime = Activation::tanh_prime;
     } else {
-        cout << "Activation type not recognized" << endl;
+        throw invalid_argument("Activation type not recognized");
     }
 }
 
