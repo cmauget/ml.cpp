@@ -1,5 +1,7 @@
 #include "../include/NeuralNetwork.hpp"
 
+#include <stdexcept>
+
 NeuralNetwork::NeuralNetwork() {
     learning_rate = 0.01;
 }
@@ -13,12 +15,15 @@ NeuralNetwork::NeuralNetwork(double learning_rate_, string loss_type_) {
     } else if (loss_type_ == "cross_entropy") {
         loss = Loss::cross_entropy;
         loss_prime = Loss::cross_entropy_prime;
+    } else {
+        throw invalid_argument("Loss type not recognized");
     }
 }
 
 void NeuralNetwork::setLearningRate(double learning_rate_) {
     learning_rate = learning_rate_;
 }
+
 
 void NeuralNetwork::setLoss(string loss_type_) {
     if (loss_type_ == "mean_squared_error") {
@@ -27,6 +32,8 @@ void NeuralNetwork::setLoss(string loss_type_) {
     } else if (loss_type_ == "cross_entropy") {
         loss = Loss::cross_entropy;
         loss_prime = Loss::cross_entropy_prime;
+    } else {
+        throw invalid_argument("Loss type not recognized");
     }
 }
 
@@ -52,6 +59,8 @@ Tensor NeuralNetwork::compute_loss_grad(Tensor output, Tensor label) {
 
 void NeuralNetwork::backward(Tensor error) {
     for (int i = layers.size() - 1; i >= 0; i--) {
+        //cout << "Layer " << i << endl;
+        //cout << "Error: " << error << endl;
         error = layers[i]->backward(error, learning_rate);
     }
 }
